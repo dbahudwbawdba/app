@@ -1,1 +1,82 @@
 
+import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+
+export default function GameApp() {
+  const [coins, setCoins] = useState(1000);
+  const [battlePass, setBattlePass] = useState(false);
+  const [inventory, setInventory] = useState([]);
+
+  const shopItems = [
+    { id: 1, name: "Sword", price: 200 },
+    { id: 2, name: "Shield", price: 150 },
+    { id: 3, name: "Skin: Neon", price: 500 },
+  ];
+
+  const buyItem = (item) => {
+    if (coins >= item.price) {
+      setCoins(coins - item.price);
+      setInventory([...inventory, item.name]);
+    }
+  };
+
+  return (
+    <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* Profile */}
+      <Card className="rounded-2xl shadow-xl">
+        <CardContent className="p-4">
+          <h2 className="text-xl font-bold">Player</h2>
+          <p>Coins: {coins}</p>
+          <p>Battlepass: {battlePass ? "Owned" : "Not Owned"}</p>
+          <Button onClick={() => setBattlePass(true)} className="mt-2">
+            Buy Battlepass (300)
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Shop */}
+      <Card className="rounded-2xl shadow-xl">
+        <CardContent className="p-4">
+          <h2 className="text-xl font-bold">Shop</h2>
+          {shopItems.map((item) => (
+            <div key={item.id} className="flex justify-between mt-2">
+              <span>{item.name}</span>
+              <Button size="sm" onClick={() => buyItem(item)}>
+                {item.price}
+              </Button>
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+
+      {/* Inventory */}
+      <Card className="rounded-2xl shadow-xl">
+        <CardContent className="p-4">
+          <h2 className="text-xl font-bold">Inventory</h2>
+          {inventory.length === 0 ? (
+            <p>Empty</p>
+          ) : (
+            inventory.map((item, i) => <p key={i}>{item}</p>)
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Game Area */}
+      <motion.div
+        className="col-span-1 md:col-span-3 bg-black text-white rounded-2xl p-6 shadow-xl"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+      >
+        <h2 className="text-2xl font-bold mb-4">Mini Game</h2>
+        <Button
+          onClick={() => setCoins(coins + 50)}
+          className="text-lg px-6 py-3"
+        >
+          Click = +50 Coins
+        </Button>
+      </motion.div>
+    </div>
+  );
+}
