@@ -3,93 +3,234 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ENGINE GAME</title>
+<title>ENGINE GAME - ULTIMATE</title>
 
 <style>
 /* ================= GLOBAL ================= */
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family:Arial;
-  background:#020617;
+  font-family:'Arial', sans-serif;
+  background:#0a0e27;
   color:white;
   overflow:hidden;
 }
 
-/* ================= BACKGROUND SYSTEM ================= */
-canvas{
-  position:fixed;
-  top:0;left:0;
-  z-index:-1;
-}
+/* ================= BACKGROUND ================= */
+canvas{position:fixed;top:0;left:0;z-index:-1}
 
 /* ================= LAYOUT ================= */
 .app{display:flex;height:100vh}
 .sidebar{
-  width:240px;
-  background:rgba(0,0,0,0.7);
+  width:280px;
+  background:linear-gradient(135deg, rgba(15,23,42,0.9), rgba(30,41,59,0.9));
   padding:20px;
+  border-right:2px solid #38bdf8;
+  overflow-y:auto;
 }
-.main{flex:1;padding:20px;overflow:auto}
+.main{flex:1;padding:20px;overflow-y:auto}
 
+/* ================= HEADER ================= */
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+  padding:15px;
+  background:rgba(15,23,42,0.8);
+  border-radius:12px;
+  border:1px solid #38bdf8;
+}
+
+.stats{display:flex;gap:20px;align-items:center}
+.stat{display:flex;align-items:center;gap:8px;font-size:18px;font-weight:bold}
+
+/* ================= BUTTONS ================= */
 button{
   width:100%;
   padding:12px;
-  margin:5px 0;
-  border:none;
-  border-radius:10px;
-  background:#1e293b;
-  color:white;
+  margin:8px 0;
+  border:2px solid #38bdf8;
+  border-radius:8px;
+  background:linear-gradient(135deg, #1e293b, #334155);
+  color:#38bdf8;
   cursor:pointer;
+  font-weight:bold;
+  transition:all 0.3s;
 }
 
-button:hover{background:#38bdf8;color:black}
+button:hover{
+  background:linear-gradient(135deg, #38bdf8, #0ea5e9);
+  color:#0a0e27;
+  transform:translateY(-2px);
+  box-shadow:0 8px 16px rgba(56,189,248,0.3);
+}
 
+button:active{transform:translateY(0)}
+
+/* ================= CARDS ================= */
 .card{
-  background:rgba(255,255,255,0.05);
+  background:linear-gradient(135deg, rgba(15,23,42,0.8), rgba(30,41,59,0.8));
   padding:20px;
-  border-radius:15px;
+  border-radius:12px;
   margin-bottom:20px;
+  border:1px solid rgba(56,189,248,0.2);
+  transition:all 0.3s;
 }
 
-/* ================= GAME OBJECT ================= */
+.card:hover{border-color:#38bdf8;box-shadow:0 8px 16px rgba(56,189,248,0.1)}
+
+/* ================= BATTLEPASS & PROGRESSION ================= */
+.progress-bar{
+  width:100%;
+  height:24px;
+  background:#0f172a;
+  border:2px solid #38bdf8;
+  border-radius:12px;
+  overflow:hidden;
+  margin:10px 0;
+}
+
+.progress-fill{
+  height:100%;
+  background:linear-gradient(90deg, #22c55e, #84cc16);
+  width:0%;
+  transition:width 0.5s ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:bold;
+}
+
+.tier-display{
+  display:grid;
+  grid-template-columns:repeat(5, 1fr);
+  gap:10px;
+  margin:15px 0;
+}
+
+.tier-item{
+  aspect-ratio:1;
+  background:rgba(56,189,248,0.1);
+  border:2px solid rgba(56,189,248,0.3);
+  border-radius:8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  transition:all 0.3s;
+}
+
+.tier-item.unlocked{
+  background:linear-gradient(135deg, #22c55e, #84cc16);
+  border-color:#22c55e;
+}
+
+.tier-item:hover{transform:scale(1.05)}
+
+.tier-num{font-size:12px;font-weight:bold;margin-top:5px}
+
+/* ================= GAME ENTITIES ================= */
 .entity{
   width:80px;
   height:80px;
   border-radius:50%;
   position:absolute;
   display:flex;
+  flex-direction:column;
   align-items:center;
   justify-content:center;
-  font-size:30px;
+  font-size:40px;
+  transition:all 0.2s;
+  box-shadow:0 0 20px currentColor;
 }
 
-.enemy{background:#ef4444}
-.player{background:#22c55e}
+.player{
+  background:radial-gradient(circle, #22c55e, #15803d);
+  border:3px solid #84cc16;
+}
+
+.enemy{
+  background:radial-gradient(circle, #ef4444, #991b1b);
+  border:3px solid #fca5a5;
+}
 
 .hpbar{
-  height:6px;
+  height:8px;
   background:#111;
   border-radius:10px;
   overflow:hidden;
-  margin-top:5px;
+  margin-top:8px;
+  width:80px;
+  border:1px solid #38bdf8;
 }
 
 .hp{
   height:100%;
-  background:#22c55e;
+  background:linear-gradient(90deg, #22c55e, #84cc16);
+  width:100%;
+  transition:width 0.3s;
 }
 
-/* ================= FLOAT TEXT ================= */
+.entity-name{
+  font-size:12px;
+  margin-top:5px;
+  font-weight:bold;
+}
+
+/* ================= FLOAT NUMBERS ================= */
 .float{
   position:absolute;
-  color:#22c55e;
-  animation:floatUp 1s forwards;
+  font-weight:bold;
+  font-size:20px;
+  animation:floatUp 1.5s forwards;
+  text-shadow:0 0 10px rgba(0,0,0,0.8);
+  pointer-events:none;
 }
 
+.float.damage{color:#ef4444}
+.float.heal{color:#22c55e}
+.float.crit{color:#fbbf24;font-size:28px}
+
 @keyframes floatUp{
-  0%{opacity:1;transform:translateY(0)}
-  100%{opacity:0;transform:translateY(-60px)}
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(-80px) scale(0.5)}
 }
+
+/* ================= SHOP ITEMS ================= */
+.shop-grid{
+  display:grid;
+  grid-template-columns:repeat(2, 1fr);
+  gap:15px;
+}
+
+.shop-item{
+  background:rgba(56,189,248,0.1);
+  border:2px solid #38bdf8;
+  padding:15px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all 0.3s;
+}
+
+.shop-item:hover{
+  background:#38bdf8;
+  color:#0a0e27;
+}
+
+.item-emoji{font-size:32px;margin-bottom:10px}
+.item-price{color:#fbbf24;font-weight:bold;margin:10px 0}
+
+/* ================= PAGES ================= */
+.page{animation:fadeIn 0.3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ================= SCROLLBAR ================= */
+::-webkit-scrollbar{width:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#38bdf8;border-radius:10px}
+::-webkit-scrollbar-thumb:hover{background:#0ea5e9}
 
 </style>
 </head>
@@ -98,32 +239,88 @@ button:hover{background:#38bdf8;color:black}
 <canvas id="bg"></canvas>
 
 <div class="app">
+<!-- SIDEBAR -->
 <div class="sidebar">
-  <h2>ENGINE</h2>
-  <button onclick="tab('game')">Game</button>
-  <button onclick="tab('battle')">Battle</button>
-  <button onclick="tab('shop')">Shop</button>
+  <h2 style="margin-bottom:20px;color:#38bdf8">⚡ ENGINE</h2>
+  
+  <div class="card">
+    <div style="text-align:center">
+      <p style="font-size:12px;color:#94a3b8">Level</p>
+      <p style="font-size:28px;color:#22c55e;font-weight:bold" id="level">1</p>
+    </div>
+  </div>
+  
+  <button onclick="tab('game')">🏠 Game</button>
+  <button onclick="tab('battle')">⚔️ Battle</button>
+  <button onclick="tab('battlepass')">🎯 Battlepass</button>
+  <button onclick="tab('shop')">🛍️ Shop</button>
 </div>
 
+<!-- MAIN CONTENT -->
 <div class="main">
 
+<!-- HEADER STATS -->
+<div class="header">
+  <div class="stats">
+    <div class="stat">💰 <span id="coins">0</span></div>
+    <div class="stat">⚔️ <span id="dmg">10</span></div>
+    <div class="stat">❤️ <span id="hp">100</span></div>
+  </div>
+</div>
+
+<!-- GAME TAB -->
 <div id="game" class="page">
   <div class="card">
-    <h1 id="coins">0</h1>
-    <button onclick="mine()">Mine Coins</button>
+    <h2>Mining System 🪨</h2>
+    <p style="color:#94a3b8;margin:10px 0">Click to earn coins</p>
+    <button onclick="mine()" style="padding:24px;font-size:20px">Mine (+10 💰)</button>
+    <p style="color:#38bdf8;margin-top:15px" id="cps">Coins/sec: 0</p>
+  </div>
+
+  <div class="card">
+    <h2>Auto Miner 🤖</h2>
+    <p style="color:#94a3b8;margin:10px 0">Passive income per second</p>
+    <button onclick="buyAutoMiner()" id="autoBtn">Buy Auto Miner (500 💰)</button>
+    <p style="color:#22c55e;font-weight:bold" id="autoStatus">Not purchased</p>
   </div>
 </div>
 
+<!-- BATTLE TAB -->
 <div id="battle" class="page" style="display:none">
   <div class="card">
-    <h2>Battle Arena</h2>
-    <div id="arena"></div>
+    <h2>Battle Arena ⚔️</h2>
+    <div id="arenaStats" style="display:flex;justify-content:space-between;margin:15px 0;font-size:14px">
+      <div>
+        <p>Your HP: <span id="playerHpText">100/100</span></p>
+        <p>Enemy HP: <span id="enemyHpText">100/100</span></p>
+      </div>
+      <button onclick="fleeHattle()" style="width:100px">Flee</button>
+    </div>
+    <div id="arena" style="position:relative;height:300px;background:rgba(0,0,0,0.3);border-radius:8px;overflow:hidden;border:2px solid #38bdf8"></div>
+    <button onclick="startBattle()" style="margin-top:15px">Start Battle</button>
   </div>
 </div>
 
+<!-- BATTLEPASS TAB -->
+<div id="battlepass" class="page" style="display:none">
+  <div class="card">
+    <h2>Battlepass 2026 🎯</h2>
+    <p style="color:#94a3b8">Progress: <span id="bpProgress">0</span>%</p>
+    <div class="progress-bar">
+      <div class="progress-fill" id="bpFill"></div>
+    </div>
+    
+    <h3 style="margin:20px 0;color:#38bdf8">Tier Rewards 🎁</h3>
+    <div class="tier-display" id="tierDisplay"></div>
+    <button onclick="claimBattlepass()" style="margin-top:15px">Claim Rewards</button>
+  </div>
+</div>
+
+<!-- SHOP TAB -->
 <div id="shop" class="page" style="display:none">
   <div class="card">
-    <button onclick="upgrade()">Upgrade (+10 dmg)</button>
+    <h2>Shop 🛍️</h2>
+    <div class="shop-grid" id="shopGrid"></div>
   </div>
 </div>
 
@@ -131,25 +328,119 @@ button:hover{background:#38bdf8;color:black}
 </div>
 
 <script>
-/* ================= CORE ENGINE ================= */
-let coins=0,damage=10;
+/* ================= GAME STATE ================= */
+let gameState={
+  coins:0,
+  damage:10,
+  maxHp:100,
+  hp:100,
+  level:1,
+  xp:0,
+  xpNeeded:100,
+  battlepassProgress:0,
+  battlepassTier:0,
+  autoMinerActive:false,
+  autoMinerSpeed:1
+};
 
-function update(){coinsEl.innerText=coins}
-function mine(){coins+=10;update()}
+let player={hp:100,max:100,x:100,y:150};
+let enemy={hp:100,max:100,x:400,y:150};
+let battleActive=false;
+
+/* ================= UI UPDATE ================= */
+function updateUI(){
+  document.getElementById('coins').innerText=gameState.coins;
+  document.getElementById('dmg').innerText=gameState.damage;
+  document.getElementById('hp').innerText=gameState.hp;
+  document.getElementById('level').innerText=gameState.level;
+  document.getElementById('cps').innerText='Coins/sec: '+(gameState.autoMinerActive?gameState.autoMinerSpeed:0);
+}
+
+/* ================= MINING SYSTEM ================= */
+function mine(){
+  gameState.coins+=10;
+  gameState.xp+=5;
+  checkLevelUp();
+  updateBattlepass();
+  updateUI();
+  showFloat(window.innerWidth/2,100,'+10 💰','gold');
+}
+
+function buyAutoMiner(){
+  if(gameState.coins>=500){
+    gameState.coins-=500;
+    gameState.autoMinerActive=true;
+    document.getElementById('autoBtn').disabled=true;
+    document.getElementById('autoStatus').innerText='✅ Active! +1 coin/sec';
+    
+    setInterval(()=>{
+      if(gameState.autoMinerActive){
+        gameState.coins+=gameState.autoMinerSpeed;
+        updateBattlepass();
+        updateUI();
+      }
+    },1000);
+  }
+  updateUI();
+}
+
+/* ================= LEVEL UP & XP ================= */
+function checkLevelUp(){
+  if(gameState.xp>=gameState.xpNeeded){
+    gameState.level++;
+    gameState.xp=0;
+    gameState.xpNeeded=Math.floor(gameState.xpNeeded*1.2);
+    gameState.damage+=5;
+    gameState.maxHp+=20;
+    gameState.hp=gameState.maxHp;
+    showFloat(window.innerWidth/2,200,'LEVEL UP! 🎉','green');
+  }
+}
+
+/* ================= BATTLEPASS SYSTEM ================= */
+function updateBattlepass(){
+  gameState.battlepassProgress=Math.min(gameState.coins,10000)/10000*100;
+  gameState.battlepassTier=Math.floor(gameState.battlepassProgress/20);
+  document.getElementById('bpFill').style.width=gameState.battlepassProgress+'%';
+  document.getElementById('bpProgress').innerText=Math.floor(gameState.battlepassProgress);
+  renderTiers();
+}
+
+function renderTiers(){
+  let html='';
+  for(let i=0;i<5;i++){
+    let unlocked=i<=gameState.battlepassTier;
+    html+=`<div class="tier-item ${unlocked?'unlocked':''}">
+      ${['🎯','💎','⚔️','🏆','👑'][i]}
+      <div class="tier-num">T${i+1}</div>
+    </div>`;
+  }
+  document.getElementById('tierDisplay').innerHTML=html;
+}
+
+function claimBattlepass(){
+  if(gameState.battlepassProgress===100){
+    gameState.coins+=500;
+    gameState.battlepassProgress=0;
+    showFloat(window.innerWidth/2,300,'+500 💰 CLAIMED!','green');
+    updateUI();
+  }
+}
 
 /* ================= BATTLE SYSTEM ================= */
-let player={hp:100,max:100,x:100,y:200}
-let enemy={hp:100,max:100,x:400,y:200}
-
 function startBattle(){
-  arena.innerHTML='';
-
+  battleActive=true;
+  player.hp=gameState.maxHp;
+  enemy.hp=100;
+  document.getElementById('playerHpText').innerText=player.hp+'/'+gameState.maxHp;
+  document.getElementById('enemyHpText').innerText=enemy.hp+'/100';
+  
+  document.getElementById('arena').innerHTML='';
   let p=createEntity('player','🧑',player);
   let e=createEntity('enemy','👾',enemy);
-
-  arena.appendChild(p);
-  arena.appendChild(e);
-
+  document.getElementById('arena').appendChild(p);
+  document.getElementById('arena').appendChild(e);
+  
   attackLoop(p,e);
 }
 
@@ -162,35 +453,81 @@ function createEntity(type,emoji,obj){
   return el;
 }
 
-function attackLoop(p,e){
+function attackLoop(pEl,eEl){
   let interval=setInterval(()=>{
-    enemy.hp-=damage;
-    showFloat(enemy.x,enemy.y,'-'+damage);
-    updateHP(e,enemy);
-
-    if(enemy.hp<=0){clearInterval(interval);coins+=100;update();}
-  },1000);
+    if(!battleActive)return;
+    
+    let isCrit=Math.random()<0.1;
+    let dmg=gameState.damage*(isCrit?2:1);
+    enemy.hp-=dmg;
+    showFloat(enemy.x,enemy.y,isCrit?'-'+dmg+'💥':'-'+dmg,isCrit?'crit':'damage');
+    updateHP(eEl,enemy.hp,100);
+    document.getElementById('enemyHpText').innerText=Math.max(0,enemy.hp)+'/100';
+    
+    if(enemy.hp<=0){
+      clearInterval(interval);
+      battleActive=false;
+      gameState.coins+=100;
+      gameState.xp+=50;
+      checkLevelUp();
+      updateBattlepass();
+      showFloat(enemy.x,enemy.y,'VICTORY! +100💰','heal');
+      updateUI();
+    }
+  },800);
 }
 
-function updateHP(el,obj){
-  let hp=el.querySelector('.hp');
-  hp.style.width=(obj.hp/obj.max*100)+'%';
+function fleeHattle(){
+  battleActive=false;
+  document.getElementById('arena').innerHTML='<p style="text-align:center;color:#94a3b8;margin-top:100px">Battle fled...</p>';
 }
 
-function showFloat(x,y,text){
+function updateHP(el,hp,maxHp){
+  let hpEl=el.querySelector('.hp');
+  hpEl.style.width=(hp/maxHp*100)+'%';
+}
+
+function showFloat(x,y,text,type='default'){
   let f=document.createElement('div');
-  f.className='float';
+  f.className='float '+type;
   f.style.left=x+'px';
   f.style.top=y+'px';
   f.innerText=text;
   document.body.appendChild(f);
-  setTimeout(()=>f.remove(),1000);
+  setTimeout(()=>f.remove(),1500);
 }
 
 /* ================= SHOP ================= */
-function upgrade(){if(coins>=100){coins-=100;damage+=10;update()}}
+function initShop(){
+  let items=[
+    {name:'Damage +10',cost:100,emoji:'⚔️',fn:()=>{gameState.damage+=10}},
+    {name:'HP +50',cost:80,emoji:'❤️',fn:()=>{gameState.maxHp+=50}},
+    {name:'Luck Potion',cost:200,emoji:'🍀',fn:()=>{alert('Crit chance +5%')}},
+    {name:'Exp Boost',cost:150,emoji:'⚡',fn:()=>{alert('XP gain +50%')}},
+  ];
+  
+  let html='';
+  items.forEach(item=>{
+    html+=`<div class="shop-item" onclick="buyItem(this,'${item.name}',${item.cost})">
+      <div class="item-emoji">${item.emoji}</div>
+      <h3>${item.name}</h3>
+      <div class="item-price">${item.cost} 💰</div>
+    </div>`;
+  });
+  document.getElementById('shopGrid').innerHTML=html;
+}
 
-/* ================= NAV ================= */
+function buyItem(el,name,cost){
+  if(gameState.coins>=cost){
+    gameState.coins-=cost;
+    showFloat(el.offsetLeft,el.offsetTop,'PURCHASED! ✅','heal');
+    updateUI();
+  }else{
+    showFloat(el.offsetLeft,el.offsetTop,'Not enough 💰','damage');
+  }
+}
+
+/* ================= NAVIGATION ================= */
 function tab(t){
   document.querySelectorAll('.page').forEach(p=>p.style.display='none');
   document.getElementById(t).style.display='block';
@@ -204,25 +541,28 @@ c.width=window.innerWidth;
 c.height=window.innerHeight;
 
 let stars=[];
-for(let i=0;i<100;i++){
-  stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2});
+for(let i=0;i<150;i++){
+  stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2,speed:Math.random()*0.5+0.1});
 }
 
 function draw(){
   ctx.clearRect(0,0,c.width,c.height);
-  ctx.fillStyle='white';
+  ctx.fillStyle='rgba(56,189,248,0.3)';
   stars.forEach(s=>{
     ctx.beginPath();
     ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
     ctx.fill();
-    s.y+=0.2;
-    if(s.y>c.height)s.y=0;
+    s.y+=s.speed;
+    if(s.y>c.height){s.y=0;s.x=Math.random()*c.width}
   });
   requestAnimationFrame(draw);
 }
 
 draw();
-update();
+initShop();
+updateBattlepass();
+updateUI();
+
 </script>
 
 </body>
