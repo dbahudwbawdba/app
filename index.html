@@ -3,150 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA GAME X</title>
+<title>ULTRA GAME GOD MODE</title>
 
 <style>
-/* RESET */
+/* ===== GLOBAL RESET ===== */
 *{margin:0;padding:0;box-sizing:border-box}
-
 body{
   font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at 20% 20%, #1e293b, #020617);
+  background:#020617;
   color:white;
   overflow:hidden;
 }
 
-/* LAYOUT */
-.wrapper{
-  display:grid;
-  grid-template-columns: 1fr 4fr;
+/* ===== ANIMATED BACKGROUND ===== */
+.bg{
+  position:fixed;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  z-index:-1;
+}
+
+.blob{
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle,#38bdf8,transparent);
+  filter:blur(120px);
+  animation: float 20s infinite alternate;
+}
+
+.blob:nth-child(2){background:#22c55e;left:60%;top:40%}
+.blob:nth-child(3){background:#818cf8;left:20%;top:60%}
+
+@keyframes float{
+  0%{transform:translateY(0px) translateX(0px)}
+  100%{transform:translateY(-100px) translateX(80px)}
+}
+
+/* ===== LAYOUT ===== */
+.app{
+  display:flex;
   height:100vh;
 }
 
 .sidebar{
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(20px);
-  padding:25px;
-  display:flex;
-  flex-direction:column;
-  gap:20px;
+  width:260px;
+  background:rgba(0,0,0,0.6);
+  backdrop-filter:blur(20px);
+  padding:20px;
 }
 
 .logo{
   font-size:26px;
-  font-weight:bold;
-  color:#38bdf8;
   text-align:center;
+  margin-bottom:20px;
+  background:linear-gradient(45deg,#38bdf8,#22c55e);
+  -webkit-background-clip:text;
+  color:transparent;
 }
 
-.menu button{
+.nav button{
+  width:100%;
   padding:15px;
-  border-radius:14px;
+  margin-bottom:10px;
   border:none;
+  border-radius:12px;
   background:rgba(255,255,255,0.05);
   color:white;
   cursor:pointer;
   transition:0.2s;
-  font-size:16px;
 }
 
-.menu button:hover{
+.nav button:hover{
   background:#38bdf8;
   color:black;
   transform:scale(1.05);
 }
 
 .main{
-  position:relative;
-  padding:40px;
-  overflow-y:auto;
+  flex:1;
+  padding:30px;
+  overflow:auto;
 }
 
-/* BACKGROUND FX */
-.bg-glow{
-  position:absolute;
-  width:600px;
-  height:600px;
-  background:radial-gradient(circle,#38bdf8,transparent);
-  filter:blur(150px);
-  top:-200px;
-  left:-200px;
-  opacity:0.4;
+/* ===== CUSTOM ICON (SVG) ===== */
+.icon{
+  width:60px;
+  height:60px;
+  margin:auto;
 }
 
-/* CARDS */
+/* ===== CARD ===== */
 .card{
   background:rgba(255,255,255,0.03);
-  border:1px solid rgba(255,255,255,0.05);
-  padding:25px;
   border-radius:20px;
-  margin-bottom:30px;
-  box-shadow:0 0 40px rgba(0,0,0,0.6);
+  padding:25px;
+  margin-bottom:20px;
+  box-shadow:0 0 50px rgba(0,0,0,0.7);
 }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:25px;
-}
-
-/* GAME */
-.big-btn{
+/* ===== GAME BUTTON ===== */
+.big{
   width:100%;
   padding:30px;
   font-size:26px;
-  border-radius:20px;
   border:none;
+  border-radius:20px;
   background:linear-gradient(45deg,#22c55e,#4ade80);
   cursor:pointer;
   transition:0.2s;
 }
 
-.big-btn:hover{
-  transform:scale(1.08);
+.big:active{
+  transform:scale(0.95);
 }
 
-.coins{
-  font-size:32px;
-  margin-bottom:20px;
-  color:#22c55e;
+/* ===== PARTICLE ===== */
+.particle{
+  position:absolute;
+  width:10px;
+  height:10px;
+  background:#22c55e;
+  border-radius:50%;
+  pointer-events:none;
+  animation: pop 1s forwards;
 }
 
-/* SHOP */
+@keyframes pop{
+  0%{opacity:1;transform:scale(1)}
+  100%{opacity:0;transform:translateY(-100px) scale(2)}
+}
+
+/* ===== SHOP GRID ===== */
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:20px;
+}
+
 .item{
   background:rgba(255,255,255,0.05);
-  border-radius:20px;
   padding:20px;
+  border-radius:20px;
   text-align:center;
   transition:0.2s;
 }
 
 .item:hover{
-  transform:translateY(-5px) scale(1.02);
+  transform:scale(1.05);
 }
 
 .buy{
   margin-top:10px;
   padding:10px;
+  width:100%;
   border:none;
   border-radius:10px;
   background:#38bdf8;
-  cursor:pointer;
 }
 
-/* INVENTORY */
-.inv-item{
-  padding:10px;
-  border-radius:10px;
-  background:rgba(255,255,255,0.05);
-  margin:5px 0;
-}
-
-/* BATTLEPASS */
-.progress{
+/* ===== PROGRESS BAR ===== */
+.barwrap{
   height:25px;
-  border-radius:20px;
   background:rgba(255,255,255,0.1);
+  border-radius:20px;
   overflow:hidden;
 }
 
@@ -154,31 +175,38 @@ body{
   height:100%;
   width:0%;
   background:linear-gradient(90deg,#38bdf8,#818cf8);
+  transition:0.3s;
 }
 
 </style>
 </head>
 
 <body>
-<div class="wrapper">
+<div class="bg">
+  <div class="blob"></div>
+  <div class="blob"></div>
+  <div class="blob"></div>
+</div>
+
+<div class="app">
 
 <div class="sidebar">
-  <div class="logo">ULTRA X</div>
-  <div class="menu">
-    <button onclick="tab('game')">🎮 Game</button>
-    <button onclick="tab('shop')">🛒 Shop</button>
-    <button onclick="tab('bp')">🎟 Battlepass</button>
-    <button onclick="tab('inv')">🎒 Inventory</button>
+  <div class="logo">ULTRA GOD</div>
+  <div class="nav">
+    <button onclick="tab('game')">GAME</button>
+    <button onclick="tab('shop')">SHOP</button>
+    <button onclick="tab('bp')">BATTLEPASS</button>
+    <button onclick="tab('inv')">INVENTORY</button>
   </div>
 </div>
 
 <div class="main">
-<div class="bg-glow"></div>
 
 <div id="game" class="page">
   <div class="card">
-    <div class="coins">💰 <span id="coins">0</span></div>
-    <button class="big-btn" onclick="clickCoin()">CLICK</button>
+    <h2>CORE ENGINE</h2>
+    <h1 id="coins">0</h1>
+    <button class="big" onclick="clickCoin(event)">CLICK CORE</button>
   </div>
 </div>
 
@@ -188,53 +216,57 @@ body{
 
 <div id="bp" class="page" style="display:none">
   <div class="card">
-    <h2>Battlepass</h2>
-    <p>Status: <span id="bpStatus">Locked</span></p>
-    <div class="progress"><div id="bar" class="bar"></div></div>
-    <br>
-    <button class="buy" onclick="buyBP()">Unlock 500</button>
+    <h2>BATTLEPASS</h2>
+    <div class="barwrap"><div id="bar" class="bar"></div></div>
+    <p id="bpStatus">LOCKED</p>
+    <button class="buy" onclick="buyBP()">UNLOCK</button>
   </div>
 </div>
 
 <div id="inv" class="page" style="display:none">
-  <div class="card">
-    <h2>Inventory</h2>
-    <div id="invList"></div>
-  </div>
+  <div class="card" id="invList"></div>
 </div>
 
 </div>
 </div>
 
 <script>
-let coins=0;
-let xp=0;
-let inv=[];
-let bp=false;
+let coins=0,xp=0,bp=false,inv=[];
 
 const items=[
-{name:'⚔ Sword',price:200},
-{name:'🛡 Shield',price:150},
-{name:'💎 Gem',price:800},
-{name:'🔥 Boost',price:1000},
-{name:'👑 Crown',price:2000}
+{name:'⚔',price:200},
+{name:'🛡',price:150},
+{name:'💎',price:500},
+{name:'🔥',price:1000},
+{name:'👑',price:2000}
 ];
 
 function update(){
   coinsEl.innerText=coins;
-  bpStatus.innerText=bp?'Unlocked':'Locked';
   bar.style.width=(xp%100)+'%';
-  invList.innerHTML=inv.map(i=>`<div class='inv-item'>${i}</div>`).join('')||'Empty';
+  bpStatus.innerText=bp?'UNLOCKED':'LOCKED';
+  invList.innerHTML=inv.join(' ')||'EMPTY';
 }
 
-function clickCoin(){coins+=50;xp+=10;update()}
+function clickCoin(e){
+  coins+=50;xp+=10;
+  spawnParticles(e.clientX,e.clientY);
+  update();
+}
+
+function spawnParticles(x,y){
+  for(let i=0;i<10;i++){
+    let p=document.createElement('div');
+    p.className='particle';
+    p.style.left=x+'px';
+    p.style.top=y+'px';
+    document.body.appendChild(p);
+    setTimeout(()=>p.remove(),1000);
+  }
+}
 
 function buy(i){
-  if(coins>=items[i].price){
-    coins-=items[i].price;
-    inv.push(items[i].name);
-    update();
-  }
+  if(coins>=items[i].price){coins-=items[i].price;inv.push(items[i].name);update()}
 }
 
 function buyBP(){if(coins>=500){coins-=500;bp=true;update()}}
@@ -242,12 +274,7 @@ function buyBP(){if(coins>=500){coins-=500;bp=true;update()}}
 function renderShop(){
   shopGrid.innerHTML='';
   items.forEach((it,i)=>{
-    shopGrid.innerHTML+=`
-    <div class='item'>
-      <h3>${it.name}</h3>
-      <p>${it.price}</p>
-      <button class='buy' onclick='buy(${i})'>Buy</button>
-    </div>`;
+    shopGrid.innerHTML+=`<div class='item'><h1>${it.name}</h1><p>${it.price}</p><button class='buy' onclick='buy(${i})'>BUY</button></div>`;
   });
 }
 
@@ -256,8 +283,7 @@ function tab(t){
   document.getElementById(t).style.display='block';
 }
 
-renderShop();
-update();
+renderShop();update();
 </script>
 
 </body>
