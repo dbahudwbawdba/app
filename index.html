@@ -3,178 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA GAME</title>
+<title>ULTRA GAME X</title>
 
 <style>
-body {
-  margin: 0;
+/* RESET */
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
   font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: white;
-  overflow: hidden;
+  background: radial-gradient(circle at 20% 20%, #1e293b, #020617);
+  color:white;
+  overflow:hidden;
 }
 
-.container {
-  display: flex;
-  height: 100vh;
+/* LAYOUT */
+.wrapper{
+  display:grid;
+  grid-template-columns: 1fr 4fr;
+  height:100vh;
 }
 
-.sidebar {
-  width: 260px;
-  background: rgba(2,6,23,0.9);
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  border-right: 1px solid rgba(255,255,255,0.05);
+.sidebar{
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  padding:25px;
+  display:flex;
+  flex-direction:column;
+  gap:20px;
 }
 
-.logo {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #38bdf8;
+.logo{
+  font-size:26px;
+  font-weight:bold;
+  color:#38bdf8;
+  text-align:center;
 }
 
-.menu button {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
+.menu button{
+  padding:15px;
+  border-radius:14px;
+  border:none;
+  background:rgba(255,255,255,0.05);
+  color:white;
+  cursor:pointer;
+  transition:0.2s;
+  font-size:16px;
 }
 
-.menu button:hover {
-  background: #38bdf8;
-  color: black;
-  transform: scale(1.05);
+.menu button:hover{
+  background:#38bdf8;
+  color:black;
+  transform:scale(1.05);
 }
 
-.main {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
+.main{
+  position:relative;
+  padding:40px;
+  overflow-y:auto;
 }
 
-.card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.5);
+/* BACKGROUND FX */
+.bg-glow{
+  position:absolute;
+  width:600px;
+  height:600px;
+  background:radial-gradient(circle,#38bdf8,transparent);
+  filter:blur(150px);
+  top:-200px;
+  left:-200px;
+  opacity:0.4;
 }
 
-h2 {
-  margin-top: 0;
+/* CARDS */
+.card{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.05);
+  padding:25px;
+  border-radius:20px;
+  margin-bottom:30px;
+  box-shadow:0 0 40px rgba(0,0,0,0.6);
 }
 
-.coins {
-  font-size: 28px;
-  color: #22c55e;
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
 }
 
-.big-btn {
-  width: 100%;
-  padding: 25px;
-  font-size: 22px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(45deg,#22c55e,#4ade80);
-  cursor: pointer;
-  transition: 0.2s;
+/* GAME */
+.big-btn{
+  width:100%;
+  padding:30px;
+  font-size:26px;
+  border-radius:20px;
+  border:none;
+  background:linear-gradient(45deg,#22c55e,#4ade80);
+  cursor:pointer;
+  transition:0.2s;
 }
 
-.big-btn:hover {
-  transform: scale(1.05);
+.big-btn:hover{
+  transform:scale(1.08);
 }
 
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
-  gap: 20px;
+.coins{
+  font-size:32px;
+  margin-bottom:20px;
+  color:#22c55e;
 }
 
-.shop-item {
-  background: rgba(255,255,255,0.05);
-  padding: 15px;
-  border-radius: 15px;
-  text-align: center;
+/* SHOP */
+.item{
+  background:rgba(255,255,255,0.05);
+  border-radius:20px;
+  padding:20px;
+  text-align:center;
+  transition:0.2s;
 }
 
-.buy {
-  margin-top: 10px;
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  background: #38bdf8;
-  cursor: pointer;
+.item:hover{
+  transform:translateY(-5px) scale(1.02);
 }
 
-.progress {
-  height: 20px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-  overflow: hidden;
+.buy{
+  margin-top:10px;
+  padding:10px;
+  border:none;
+  border-radius:10px;
+  background:#38bdf8;
+  cursor:pointer;
 }
 
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,#38bdf8,#818cf8);
+/* INVENTORY */
+.inv-item{
+  padding:10px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  margin:5px 0;
+}
+
+/* BATTLEPASS */
+.progress{
+  height:25px;
+  border-radius:20px;
+  background:rgba(255,255,255,0.1);
+  overflow:hidden;
+}
+
+.bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,#38bdf8,#818cf8);
 }
 
 </style>
 </head>
 
 <body>
-<div class="container">
+<div class="wrapper">
 
 <div class="sidebar">
-  <div class="logo">ULTRA GAME</div>
+  <div class="logo">ULTRA X</div>
   <div class="menu">
-    <button onclick="showTab('game')">🎮 Game</button>
-    <button onclick="showTab('shop')">🛒 Shop</button>
-    <button onclick="showTab('battlepass')">🎟️ Battlepass</button>
-    <button onclick="showTab('inventory')">🎒 Inventory</button>
+    <button onclick="tab('game')">🎮 Game</button>
+    <button onclick="tab('shop')">🛒 Shop</button>
+    <button onclick="tab('bp')">🎟 Battlepass</button>
+    <button onclick="tab('inv')">🎒 Inventory</button>
   </div>
 </div>
 
 <div class="main">
+<div class="bg-glow"></div>
 
-<div id="game" class="tab">
+<div id="game" class="page">
   <div class="card">
-    <h2>Clicker Engine</h2>
     <div class="coins">💰 <span id="coins">0</span></div>
-    <br>
-    <button class="big-btn" onclick="earnCoins()">CLICK TO FARM</button>
+    <button class="big-btn" onclick="clickCoin()">CLICK</button>
   </div>
 </div>
 
-<div id="shop" class="tab" style="display:none">
-  <div class="card">
-    <h2>Shop</h2>
-    <div class="shop-grid" id="shopItems"></div>
-  </div>
+<div id="shop" class="page" style="display:none">
+  <div class="grid" id="shopGrid"></div>
 </div>
 
-<div id="battlepass" class="tab" style="display:none">
+<div id="bp" class="page" style="display:none">
   <div class="card">
     <h2>Battlepass</h2>
     <p>Status: <span id="bpStatus">Locked</span></p>
-    <div class="progress"><div id="xpBar" class="progress-bar"></div></div>
+    <div class="progress"><div id="bar" class="bar"></div></div>
     <br>
-    <button class="buy" onclick="buyBattlepass()">Unlock (500)</button>
+    <button class="buy" onclick="buyBP()">Unlock 500</button>
   </div>
 </div>
 
-<div id="inventory" class="tab" style="display:none">
+<div id="inv" class="page" style="display:none">
   <div class="card">
     <h2>Inventory</h2>
-    <div id="inventoryList"></div>
+    <div id="invList"></div>
   </div>
 </div>
 
@@ -182,323 +207,57 @@ h2 {
 </div>
 
 <script>
-let coins = 0;
-let xp = 0;
-let inventory = [];
-let battlepass = false;
+let coins=0;
+let xp=0;
+let inv=[];
+let bp=false;
 
-const items = [
-  { name: '⚔️ Sword', price: 200 },
-  { name: '🛡️ Shield', price: 150 },
-  { name: '✨ Neon Skin', price: 500 },
-  { name: '🔥 Booster', price: 1000 }
+const items=[
+{name:'⚔ Sword',price:200},
+{name:'🛡 Shield',price:150},
+{name:'💎 Gem',price:800},
+{name:'🔥 Boost',price:1000},
+{name:'👑 Crown',price:2000}
 ];
 
-function updateUI() {
-  document.getElementById('coins').innerText = coins;
-  document.getElementById('bpStatus').innerText = battlepass ? 'Unlocked' : 'Locked';
-  document.getElementById('xpBar').style.width = (xp % 100) + '%';
-
-  document.getElementById('inventoryList').innerHTML = inventory.length
-    ? inventory.join('<br>')
-    : 'Empty';
+function update(){
+  coinsEl.innerText=coins;
+  bpStatus.innerText=bp?'Unlocked':'Locked';
+  bar.style.width=(xp%100)+'%';
+  invList.innerHTML=inv.map(i=>`<div class='inv-item'>${i}</div>`).join('')||'Empty';
 }
 
-function earnCoins() {
-  coins += 50;
-  xp += 10;
-  updateUI();
-}
+function clickCoin(){coins+=50;xp+=10;update()}
 
-function buyItem(i) {
-  let item = items[i];
-  if (coins >= item.price) {
-    coins -= item.price;
-    inventory.push(item.name);
-    updateUI();
+function buy(i){
+  if(coins>=items[i].price){
+    coins-=items[i].price;
+    inv.push(items[i].name);
+    update();
   }
 }
 
-function buyBattlepass() {
-  if (coins >= 500 && !battlepass) {
-    coins -= 500;
-    battlepass = true;
-    updateUI();
-  }
-}
+function buyBP(){if(coins>=500){coins-=500;bp=true;update()}}
 
-function renderShop() {
-  let shop = document.getElementById('shopItems');
-  shop.innerHTML = '';
-  items.forEach((item,i)=>{
-    shop.innerHTML += `
-    <div class="shop-item">
-      <h3>${item.name}</h3>
-      <p>${item.price} coins</p>
-      <button class="buy" onclick="buyItem(${i})">Buy</button>
+function renderShop(){
+  shopGrid.innerHTML='';
+  items.forEach((it,i)=>{
+    shopGrid.innerHTML+=`
+    <div class='item'>
+      <h3>${it.name}</h3>
+      <p>${it.price}</p>
+      <button class='buy' onclick='buy(${i})'>Buy</button>
     </div>`;
   });
 }
 
-function showTab(tab) {
-  document.querySelectorAll('.tab').forEach(t=>t.style.display='none');
-  document.getElementById(tab).style.display='block';
+function tab(t){
+  document.querySelectorAll('.page').forEach(p=>p.style.display='none');
+  document.getElementById(t).style.display='block';
 }
 
 renderShop();
-updateUI();
-</script>
-
-</body>
-</html><!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA GAME</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
-  background: radial-gradient(circle at top, #0f172a, #020617);
-  color: white;
-  overflow: hidden;
-}
-
-.container {
-  display: flex;
-  height: 100vh;
-}
-
-.sidebar {
-  width: 260px;
-  background: rgba(2,6,23,0.9);
-  backdrop-filter: blur(10px);
-  padding: 20px;
-  border-right: 1px solid rgba(255,255,255,0.05);
-}
-
-.logo {
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 30px;
-  color: #38bdf8;
-}
-
-.menu button {
-  width: 100%;
-  padding: 14px;
-  margin-bottom: 12px;
-  border: none;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  color: white;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.menu button:hover {
-  background: #38bdf8;
-  color: black;
-  transform: scale(1.05);
-}
-
-.main {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.card {
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.05);
-  border-radius: 20px;
-  padding: 25px;
-  margin-bottom: 25px;
-  box-shadow: 0 0 40px rgba(0,0,0,0.5);
-}
-
-h2 {
-  margin-top: 0;
-}
-
-.coins {
-  font-size: 28px;
-  color: #22c55e;
-}
-
-.big-btn {
-  width: 100%;
-  padding: 25px;
-  font-size: 22px;
-  border-radius: 20px;
-  border: none;
-  background: linear-gradient(45deg,#22c55e,#4ade80);
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.big-btn:hover {
-  transform: scale(1.05);
-}
-
-.shop-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(200px,1fr));
-  gap: 20px;
-}
-
-.shop-item {
-  background: rgba(255,255,255,0.05);
-  padding: 15px;
-  border-radius: 15px;
-  text-align: center;
-}
-
-.buy {
-  margin-top: 10px;
-  padding: 10px;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  background: #38bdf8;
-  cursor: pointer;
-}
-
-.progress {
-  height: 20px;
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.progress-bar {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg,#38bdf8,#818cf8);
-}
-
-</style>
-</head>
-
-<body>
-<div class="container">
-
-<div class="sidebar">
-  <div class="logo">ULTRA GAME</div>
-  <div class="menu">
-    <button onclick="showTab('game')">🎮 Game</button>
-    <button onclick="showTab('shop')">🛒 Shop</button>
-    <button onclick="showTab('battlepass')">🎟️ Battlepass</button>
-    <button onclick="showTab('inventory')">🎒 Inventory</button>
-  </div>
-</div>
-
-<div class="main">
-
-<div id="game" class="tab">
-  <div class="card">
-    <h2>Clicker Engine</h2>
-    <div class="coins">💰 <span id="coins">0</span></div>
-    <br>
-    <button class="big-btn" onclick="earnCoins()">CLICK TO FARM</button>
-  </div>
-</div>
-
-<div id="shop" class="tab" style="display:none">
-  <div class="card">
-    <h2>Shop</h2>
-    <div class="shop-grid" id="shopItems"></div>
-  </div>
-</div>
-
-<div id="battlepass" class="tab" style="display:none">
-  <div class="card">
-    <h2>Battlepass</h2>
-    <p>Status: <span id="bpStatus">Locked</span></p>
-    <div class="progress"><div id="xpBar" class="progress-bar"></div></div>
-    <br>
-    <button class="buy" onclick="buyBattlepass()">Unlock (500)</button>
-  </div>
-</div>
-
-<div id="inventory" class="tab" style="display:none">
-  <div class="card">
-    <h2>Inventory</h2>
-    <div id="inventoryList"></div>
-  </div>
-</div>
-
-</div>
-</div>
-
-<script>
-let coins = 0;
-let xp = 0;
-let inventory = [];
-let battlepass = false;
-
-const items = [
-  { name: '⚔️ Sword', price: 200 },
-  { name: '🛡️ Shield', price: 150 },
-  { name: '✨ Neon Skin', price: 500 },
-  { name: '🔥 Booster', price: 1000 }
-];
-
-function updateUI() {
-  document.getElementById('coins').innerText = coins;
-  document.getElementById('bpStatus').innerText = battlepass ? 'Unlocked' : 'Locked';
-  document.getElementById('xpBar').style.width = (xp % 100) + '%';
-
-  document.getElementById('inventoryList').innerHTML = inventory.length
-    ? inventory.join('<br>')
-    : 'Empty';
-}
-
-function earnCoins() {
-  coins += 50;
-  xp += 10;
-  updateUI();
-}
-
-function buyItem(i) {
-  let item = items[i];
-  if (coins >= item.price) {
-    coins -= item.price;
-    inventory.push(item.name);
-    updateUI();
-  }
-}
-
-function buyBattlepass() {
-  if (coins >= 500 && !battlepass) {
-    coins -= 500;
-    battlepass = true;
-    updateUI();
-  }
-}
-
-function renderShop() {
-  let shop = document.getElementById('shopItems');
-  shop.innerHTML = '';
-  items.forEach((item,i)=>{
-    shop.innerHTML += `
-    <div class="shop-item">
-      <h3>${item.name}</h3>
-      <p>${item.price} coins</p>
-      <button class="buy" onclick="buyItem(${i})">Buy</button>
-    </div>`;
-  });
-}
-
-function showTab(tab) {
-  document.querySelectorAll('.tab').forEach(t=>t.style.display='none');
-  document.getElementById(tab).style.display='block';
-}
-
-renderShop();
-updateUI();
+update();
 </script>
 
 </body>
