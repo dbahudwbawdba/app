@@ -1,82 +1,179 @@
-
-import React, { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { motion } from "framer-motion";
-
-export default function GameApp() {
-  const [coins, setCoins] = useState(1000);
-  const [battlePass, setBattlePass] = useState(false);
-  const [inventory, setInventory] = useState([]);
-
-  const shopItems = [
-    { id: 1, name: "Sword", price: 200 },
-    { id: 2, name: "Shield", price: 150 },
-    { id: 3, name: "Skin: Neon", price: 500 },
-  ];
-
-  const buyItem = (item) => {
-    if (coins >= item.price) {
-      setCoins(coins - item.price);
-      setInventory([...inventory, item.name]);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MEGA GAME</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: white;
     }
-  };
+    .container {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      height: 100vh;
+    }
+    .sidebar {
+      background: #020617;
+      padding: 20px;
+      border-right: 1px solid #1e293b;
+    }
+    .sidebar h1 {
+      font-size: 20px;
+    }
+    .menu button {
+      width: 100%;
+      margin: 10px 0;
+      padding: 10px;
+      background: #1e293b;
+      border: none;
+      color: white;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+    .main {
+      padding: 20px;
+    }
+    .card {
+      background: #020617;
+      padding: 20px;
+      border-radius: 15px;
+      margin-bottom: 20px;
+    }
+    .shop-item {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+    button.buy {
+      background: #22c55e;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .big-btn {
+      padding: 20px;
+      font-size: 20px;
+      background: #3b82f6;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
 
-  return (
-    <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-      {/* Profile */}
-      <Card className="rounded-2xl shadow-xl">
-        <CardContent className="p-4">
-          <h2 className="text-xl font-bold">Player</h2>
-          <p>Coins: {coins}</p>
-          <p>Battlepass: {battlePass ? "Owned" : "Not Owned"}</p>
-          <Button onClick={() => setBattlePass(true)} className="mt-2">
-            Buy Battlepass (300)
-          </Button>
-        </CardContent>
-      </Card>
-
-      {/* Shop */}
-      <Card className="rounded-2xl shadow-xl">
-        <CardContent className="p-4">
-          <h2 className="text-xl font-bold">Shop</h2>
-          {shopItems.map((item) => (
-            <div key={item.id} className="flex justify-between mt-2">
-              <span>{item.name}</span>
-              <Button size="sm" onClick={() => buyItem(item)}>
-                {item.price}
-              </Button>
-            </div>
-          ))}
-        </CardContent>
-      </Card>
-
-      {/* Inventory */}
-      <Card className="rounded-2xl shadow-xl">
-        <CardContent className="p-4">
-          <h2 className="text-xl font-bold">Inventory</h2>
-          {inventory.length === 0 ? (
-            <p>Empty</p>
-          ) : (
-            inventory.map((item, i) => <p key={i}>{item}</p>)
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Game Area */}
-      <motion.div
-        className="col-span-1 md:col-span-3 bg-black text-white rounded-2xl p-6 shadow-xl"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-      >
-        <h2 className="text-2xl font-bold mb-4">Mini Game</h2>
-        <Button
-          onClick={() => setCoins(coins + 50)}
-          className="text-lg px-6 py-3"
-        >
-          Click = +50 Coins
-        </Button>
-      </motion.div>
+<div class="container">
+  <div class="sidebar">
+    <h1>MEGA GAME</h1>
+    <div class="menu">
+      <button onclick="showTab('game')">Game</button>
+      <button onclick="showTab('shop')">Shop</button>
+      <button onclick="showTab('battlepass')">Battlepass</button>
+      <button onclick="showTab('inventory')">Inventory</button>
     </div>
-  );
+  </div>
+
+  <div class="main">
+    <div id="game" class="tab">
+      <div class="card">
+        <h2>Clicker Game</h2>
+        <p>Coins: <span id="coins">1000</span></p>
+        <button class="big-btn" onclick="earnCoins()">+50 Coins</button>
+      </div>
+    </div>
+
+    <div id="shop" class="tab" style="display:none">
+      <div class="card">
+        <h2>Shop</h2>
+        <div id="shopItems"></div>
+      </div>
+    </div>
+
+    <div id="battlepass" class="tab" style="display:none">
+      <div class="card">
+        <h2>Battlepass</h2>
+        <p>Status: <span id="bpStatus">Not Owned</span></p>
+        <button class="buy" onclick="buyBattlepass()">Buy (300)</button>
+      </div>
+    </div>
+
+    <div id="inventory" class="tab" style="display:none">
+      <div class="card">
+        <h2>Inventory</h2>
+        <div id="inventoryList">Empty</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let coins = 1000;
+let inventory = [];
+let battlepass = false;
+
+const items = [
+  { name: 'Sword', price: 200 },
+  { name: 'Shield', price: 150 },
+  { name: 'Neon Skin', price: 500 }
+];
+
+function updateUI() {
+  document.getElementById('coins').innerText = coins;
+  document.getElementById('bpStatus').innerText = battlepass ? 'Owned' : 'Not Owned';
+
+  const inv = document.getElementById('inventoryList');
+  inv.innerHTML = inventory.length ? inventory.join('<br>') : 'Empty';
 }
+
+function earnCoins() {
+  coins += 50;
+  updateUI();
+}
+
+function buyItem(index) {
+  const item = items[index];
+  if (coins >= item.price) {
+    coins -= item.price;
+    inventory.push(item.name);
+    updateUI();
+  }
+}
+
+function buyBattlepass() {
+  if (coins >= 300 && !battlepass) {
+    coins -= 300;
+    battlepass = true;
+    updateUI();
+  }
+}
+
+function renderShop() {
+  const shopDiv = document.getElementById('shopItems');
+  shopDiv.innerHTML = '';
+  items.forEach((item, i) => {
+    shopDiv.innerHTML += `
+      <div class="shop-item">
+        <span>${item.name} (${item.price})</span>
+        <button class="buy" onclick="buyItem(${i})">Buy</button>
+      </div>
+    `;
+  });
+}
+
+function showTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
+  document.getElementById(tab).style.display = 'block';
+}
+
+renderShop();
+updateUI();
+</script>
+
+</body>
+</html>
