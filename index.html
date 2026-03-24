@@ -3,287 +3,226 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ULTRA GAME GOD MODE</title>
+<title>ENGINE GAME</title>
 
 <style>
-/* ===== GLOBAL RESET ===== */
+/* ================= GLOBAL ================= */
 *{margin:0;padding:0;box-sizing:border-box}
 body{
-  font-family: 'Segoe UI', sans-serif;
+  font-family:Arial;
   background:#020617;
   color:white;
   overflow:hidden;
 }
 
-/* ===== ANIMATED BACKGROUND ===== */
-.bg{
+/* ================= BACKGROUND SYSTEM ================= */
+canvas{
   position:fixed;
-  width:100%;
-  height:100%;
-  overflow:hidden;
+  top:0;left:0;
   z-index:-1;
 }
 
-.blob{
-  position:absolute;
-  width:500px;
-  height:500px;
-  background:radial-gradient(circle,#38bdf8,transparent);
-  filter:blur(120px);
-  animation: float 20s infinite alternate;
-}
-
-.blob:nth-child(2){background:#22c55e;left:60%;top:40%}
-.blob:nth-child(3){background:#818cf8;left:20%;top:60%}
-
-@keyframes float{
-  0%{transform:translateY(0px) translateX(0px)}
-  100%{transform:translateY(-100px) translateX(80px)}
-}
-
-/* ===== LAYOUT ===== */
-.app{
-  display:flex;
-  height:100vh;
-}
-
+/* ================= LAYOUT ================= */
+.app{display:flex;height:100vh}
 .sidebar{
-  width:260px;
-  background:rgba(0,0,0,0.6);
-  backdrop-filter:blur(20px);
+  width:240px;
+  background:rgba(0,0,0,0.7);
   padding:20px;
 }
+.main{flex:1;padding:20px;overflow:auto}
 
-.logo{
-  font-size:26px;
-  text-align:center;
-  margin-bottom:20px;
-  background:linear-gradient(45deg,#38bdf8,#22c55e);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.nav button{
+button{
   width:100%;
-  padding:15px;
-  margin-bottom:10px;
-  border:none;
-  border-radius:12px;
-  background:rgba(255,255,255,0.05);
-  color:white;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.nav button:hover{
-  background:#38bdf8;
-  color:black;
-  transform:scale(1.05);
-}
-
-.main{
-  flex:1;
-  padding:30px;
-  overflow:auto;
-}
-
-/* ===== CUSTOM ICON (SVG) ===== */
-.icon{
-  width:60px;
-  height:60px;
-  margin:auto;
-}
-
-/* ===== CARD ===== */
-.card{
-  background:rgba(255,255,255,0.03);
-  border-radius:20px;
-  padding:25px;
-  margin-bottom:20px;
-  box-shadow:0 0 50px rgba(0,0,0,0.7);
-}
-
-/* ===== GAME BUTTON ===== */
-.big{
-  width:100%;
-  padding:30px;
-  font-size:26px;
-  border:none;
-  border-radius:20px;
-  background:linear-gradient(45deg,#22c55e,#4ade80);
-  cursor:pointer;
-  transition:0.2s;
-}
-
-.big:active{
-  transform:scale(0.95);
-}
-
-/* ===== PARTICLE ===== */
-.particle{
-  position:absolute;
-  width:10px;
-  height:10px;
-  background:#22c55e;
-  border-radius:50%;
-  pointer-events:none;
-  animation: pop 1s forwards;
-}
-
-@keyframes pop{
-  0%{opacity:1;transform:scale(1)}
-  100%{opacity:0;transform:translateY(-100px) scale(2)}
-}
-
-/* ===== SHOP GRID ===== */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:20px;
-}
-
-.item{
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  border-radius:20px;
-  text-align:center;
-  transition:0.2s;
-}
-
-.item:hover{
-  transform:scale(1.05);
-}
-
-.buy{
-  margin-top:10px;
-  padding:10px;
-  width:100%;
+  padding:12px;
+  margin:5px 0;
   border:none;
   border-radius:10px;
-  background:#38bdf8;
+  background:#1e293b;
+  color:white;
+  cursor:pointer;
 }
 
-/* ===== PROGRESS BAR ===== */
-.barwrap{
-  height:25px;
-  background:rgba(255,255,255,0.1);
-  border-radius:20px;
+button:hover{background:#38bdf8;color:black}
+
+.card{
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:20px;
+}
+
+/* ================= GAME OBJECT ================= */
+.entity{
+  width:80px;
+  height:80px;
+  border-radius:50%;
+  position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+}
+
+.enemy{background:#ef4444}
+.player{background:#22c55e}
+
+.hpbar{
+  height:6px;
+  background:#111;
+  border-radius:10px;
   overflow:hidden;
+  margin-top:5px;
 }
 
-.bar{
+.hp{
   height:100%;
-  width:0%;
-  background:linear-gradient(90deg,#38bdf8,#818cf8);
-  transition:0.3s;
+  background:#22c55e;
+}
+
+/* ================= FLOAT TEXT ================= */
+.float{
+  position:absolute;
+  color:#22c55e;
+  animation:floatUp 1s forwards;
+}
+
+@keyframes floatUp{
+  0%{opacity:1;transform:translateY(0)}
+  100%{opacity:0;transform:translateY(-60px)}
 }
 
 </style>
 </head>
 
 <body>
-<div class="bg">
-  <div class="blob"></div>
-  <div class="blob"></div>
-  <div class="blob"></div>
-</div>
+<canvas id="bg"></canvas>
 
 <div class="app">
-
 <div class="sidebar">
-  <div class="logo">ULTRA GOD</div>
-  <div class="nav">
-    <button onclick="tab('game')">GAME</button>
-    <button onclick="tab('shop')">SHOP</button>
-    <button onclick="tab('bp')">BATTLEPASS</button>
-    <button onclick="tab('inv')">INVENTORY</button>
-  </div>
+  <h2>ENGINE</h2>
+  <button onclick="tab('game')">Game</button>
+  <button onclick="tab('battle')">Battle</button>
+  <button onclick="tab('shop')">Shop</button>
 </div>
 
 <div class="main">
 
 <div id="game" class="page">
   <div class="card">
-    <h2>CORE ENGINE</h2>
     <h1 id="coins">0</h1>
-    <button class="big" onclick="clickCoin(event)">CLICK CORE</button>
+    <button onclick="mine()">Mine Coins</button>
+  </div>
+</div>
+
+<div id="battle" class="page" style="display:none">
+  <div class="card">
+    <h2>Battle Arena</h2>
+    <div id="arena"></div>
   </div>
 </div>
 
 <div id="shop" class="page" style="display:none">
-  <div class="grid" id="shopGrid"></div>
-</div>
-
-<div id="bp" class="page" style="display:none">
   <div class="card">
-    <h2>BATTLEPASS</h2>
-    <div class="barwrap"><div id="bar" class="bar"></div></div>
-    <p id="bpStatus">LOCKED</p>
-    <button class="buy" onclick="buyBP()">UNLOCK</button>
+    <button onclick="upgrade()">Upgrade (+10 dmg)</button>
   </div>
-</div>
-
-<div id="inv" class="page" style="display:none">
-  <div class="card" id="invList"></div>
 </div>
 
 </div>
 </div>
 
 <script>
-let coins=0,xp=0,bp=false,inv=[];
+/* ================= CORE ENGINE ================= */
+let coins=0,damage=10;
 
-const items=[
-{name:'⚔',price:200},
-{name:'🛡',price:150},
-{name:'💎',price:500},
-{name:'🔥',price:1000},
-{name:'👑',price:2000}
-];
+function update(){coinsEl.innerText=coins}
+function mine(){coins+=10;update()}
 
-function update(){
-  coinsEl.innerText=coins;
-  bar.style.width=(xp%100)+'%';
-  bpStatus.innerText=bp?'UNLOCKED':'LOCKED';
-  invList.innerHTML=inv.join(' ')||'EMPTY';
+/* ================= BATTLE SYSTEM ================= */
+let player={hp:100,max:100,x:100,y:200}
+let enemy={hp:100,max:100,x:400,y:200}
+
+function startBattle(){
+  arena.innerHTML='';
+
+  let p=createEntity('player','🧑',player);
+  let e=createEntity('enemy','👾',enemy);
+
+  arena.appendChild(p);
+  arena.appendChild(e);
+
+  attackLoop(p,e);
 }
 
-function clickCoin(e){
-  coins+=50;xp+=10;
-  spawnParticles(e.clientX,e.clientY);
-  update();
+function createEntity(type,emoji,obj){
+  let el=document.createElement('div');
+  el.className='entity '+type;
+  el.style.left=obj.x+'px';
+  el.style.top=obj.y+'px';
+  el.innerHTML=emoji+"<div class='hpbar'><div class='hp'></div></div>";
+  return el;
 }
 
-function spawnParticles(x,y){
-  for(let i=0;i<10;i++){
-    let p=document.createElement('div');
-    p.className='particle';
-    p.style.left=x+'px';
-    p.style.top=y+'px';
-    document.body.appendChild(p);
-    setTimeout(()=>p.remove(),1000);
-  }
+function attackLoop(p,e){
+  let interval=setInterval(()=>{
+    enemy.hp-=damage;
+    showFloat(enemy.x,enemy.y,'-'+damage);
+    updateHP(e,enemy);
+
+    if(enemy.hp<=0){clearInterval(interval);coins+=100;update();}
+  },1000);
 }
 
-function buy(i){
-  if(coins>=items[i].price){coins-=items[i].price;inv.push(items[i].name);update()}
+function updateHP(el,obj){
+  let hp=el.querySelector('.hp');
+  hp.style.width=(obj.hp/obj.max*100)+'%';
 }
 
-function buyBP(){if(coins>=500){coins-=500;bp=true;update()}}
-
-function renderShop(){
-  shopGrid.innerHTML='';
-  items.forEach((it,i)=>{
-    shopGrid.innerHTML+=`<div class='item'><h1>${it.name}</h1><p>${it.price}</p><button class='buy' onclick='buy(${i})'>BUY</button></div>`;
-  });
+function showFloat(x,y,text){
+  let f=document.createElement('div');
+  f.className='float';
+  f.style.left=x+'px';
+  f.style.top=y+'px';
+  f.innerText=text;
+  document.body.appendChild(f);
+  setTimeout(()=>f.remove(),1000);
 }
 
+/* ================= SHOP ================= */
+function upgrade(){if(coins>=100){coins-=100;damage+=10;update()}}
+
+/* ================= NAV ================= */
 function tab(t){
   document.querySelectorAll('.page').forEach(p=>p.style.display='none');
   document.getElementById(t).style.display='block';
+  if(t==='battle')startBattle();
 }
 
-renderShop();update();
+/* ================= BACKGROUND PARTICLES ================= */
+const c=document.getElementById('bg');
+const ctx=c.getContext('2d');
+c.width=window.innerWidth;
+c.height=window.innerHeight;
+
+let stars=[];
+for(let i=0;i<100;i++){
+  stars.push({x:Math.random()*c.width,y:Math.random()*c.height,r:Math.random()*2});
+}
+
+function draw(){
+  ctx.clearRect(0,0,c.width,c.height);
+  ctx.fillStyle='white';
+  stars.forEach(s=>{
+    ctx.beginPath();
+    ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+    ctx.fill();
+    s.y+=0.2;
+    if(s.y>c.height)s.y=0;
+  });
+  requestAnimationFrame(draw);
+}
+
+draw();
+update();
 </script>
 
 </body>
